@@ -68,7 +68,11 @@ class App extends React.Component {
               onClick={() =>
                 this.sendMessage({
                   action: "newGame",
-                  gameInfo: { home: "dad", away: "reef", duration: 0.5 }
+                  gameInfo: {
+                    home: "lazy llamas",
+                    away: "polar puppy pops",
+                    duration: 20
+                  }
                 })
               }
             >

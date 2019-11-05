@@ -18,7 +18,7 @@ class Weather extends React.Component {
       >
         <a
           class="weatherwidget-io"
-          href="https://forecast7.com/en/33d88n111d93/85331/"
+          href="https://forecast7.com/en/33d88n111d93/85331/?unit=us"
           data-label_1="Cave Creek"
           data-label_2="Weather"
           data-mode="Current"

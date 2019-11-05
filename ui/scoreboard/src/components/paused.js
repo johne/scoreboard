@@ -10,8 +10,9 @@ class Paused extends React.Component {
       const countup = moment(now - then);
       const minutes = countup.format("mm");
       const seconds = countup.format("ss");
+      const milliseconds = countup.format("SSS");
 
-      this.setState({ minutes, seconds });
+      this.setState({ minutes, seconds, milliseconds });
     }, 1000);
   }
 
@@ -28,10 +29,12 @@ class Paused extends React.Component {
   }
 
   render() {
-    const { minutes, seconds } = this.state;
+    const { minutes, seconds, milliseconds } = this.state;
 
     return minutes === 0 ? (
-      <span>{this.pad(seconds, 2)}</span>
+      <span>
+        {this.pad(seconds, 2)}.{Math.round(milliseconds / 100)}
+      </span>
     ) : (
       <span>
         {minutes}:{this.pad(seconds, 2)}

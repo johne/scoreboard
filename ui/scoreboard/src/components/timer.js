@@ -1,8 +1,23 @@
 import React from "react";
 import Countdown from "react-countdown-now";
 import Sound from "react-sound";
+import styled from "styled-components";
 
-// Random component
+const ClockContainer = styled.div`
+  text-align: center;
+  width: 100%;
+  color: white;
+  font-size: 150px;
+  font-family: "Arial Narrow";
+  padding-top: 70px;
+`;
+
+const PauseCounter = styled.div`
+  color: red;
+  font-size: 100px;
+  text-align: right;
+  padding-right: 30px;
+`;
 
 class Timer extends React.Component {
   componentDidMount() {
@@ -46,7 +61,7 @@ class Timer extends React.Component {
     if (completed) {
       return <React.Fragment />;
     } else {
-      return <span>{seconds}</span>;
+      return <PauseCounter>{seconds}</PauseCounter>;
     }
   };
 
@@ -64,7 +79,7 @@ class Timer extends React.Component {
           {minutes === 0 ? (
             <span>
               {this.pad(seconds, 2)}
-              {milliseconds && (
+              {milliseconds !== undefined && (
                 <React.Fragment>
                   .{Math.round(milliseconds / 100)}
                 </React.Fragment>
@@ -88,7 +103,7 @@ class Timer extends React.Component {
     }
   };
 
-  render() {
+  renderTimer() {
     const { end, start, paused, timeLeft } = this.props;
     const minutes = Math.floor(timeLeft / 60000);
     const seconds = ((timeLeft % 60000) / 1000).toFixed(0);
@@ -107,6 +122,10 @@ class Timer extends React.Component {
     ) : (
       <div />
     );
+  }
+
+  render() {
+    return <ClockContainer>{this.renderTimer()}</ClockContainer>;
   }
 }
 

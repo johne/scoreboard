@@ -1,5 +1,5 @@
 import React from "react";
-import moment from "moment";
+import moment from "moment-timezone";
 
 class Clock extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class Clock extends React.Component {
           width: "100%"
         }}
       >
-        {now.format("h:mm a")}
+        {now.tz("America/Phoenix").format("h:mm a")}
       </div>
     );
   };
