@@ -16,7 +16,7 @@ class Feed extends React.Component {
   }
 
   thumb = img => {
-    return img.node.thumbnail_resources[3].src;
+    return { url: img.node.thumbnail_resources[2].src };
   };
 
   shuffleArray(array) {
@@ -38,18 +38,19 @@ class Feed extends React.Component {
               search.length,
               text.length - search.length - 1
             );
-            parsed = JSON.parse(jsonText, (key, value) => {
-              console.log(key);
-              if (typeof value === "string") {
-                if (key === "src") {
-                  return value;
-                } else {
-                  return "";
-                }
-              } else {
-                return value;
-              }
-            });
+            // parsed = JSON.parse(jsonText, (key, value) => {
+            //   console.log(key);
+            //   if (typeof value === "string") {
+            //     if (key === "src") {
+            //       return value;
+            //     } else {
+            //       return "";
+            //     }
+            //   } else {
+            //     return value;
+            //   }
+            // });
+            parsed = JSON.parse(jsonText);
           }
         },
         onclosetag(tagname) {}
@@ -95,9 +96,29 @@ class Feed extends React.Component {
 
     console.log(this.fadeProperties.defaultIndex);
     return (
-      <Fade {...this.fadeProperties}>
-        {this.state.images.map((url, index) => (
-          <img key={index} style={{ width: "100%" }} src={url} />
+      <Fade style={{ width: "100%", height: "100%" }} {...this.fadeProperties}>
+        {this.state.images.map((imgInfo, index) => (
+          <div key={index}>
+            <img
+              key={index}
+              style={{ width: "100%" }}
+              alt={imgInfo.alt}
+              src={imgInfo.url}
+            />
+            <div
+              style={{
+                width: "100%",
+                color: "white",
+                font: "Tahoma",
+                fontSize: 50,
+                fontWeight: "bold",
+                textAlign: "center",
+                paddingTop: 40
+              }}
+            >
+              #ellisFamilyHoops
+            </div>
+          </div>
         ))}
       </Fade>
     );

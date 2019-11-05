@@ -4,9 +4,7 @@ import styled from "styled-components";
 import Scoreboard from "./components/scoreboard";
 const Nes = require("@hapi/nes/lib/client");
 
-const StyledDiv = styled.div`
-  margin-top: 60px;
-`;
+const StyledDiv = styled.div``;
 
 class App extends React.Component {
   constructor() {

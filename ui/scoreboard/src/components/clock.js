@@ -19,7 +19,21 @@ class Clock extends React.Component {
 
   render = () => {
     const { now } = this.state;
-    return <div>{now.format("h:mm a")}</div>;
+    return (
+      <div
+        style={{
+          color: "white",
+          font: "Tahoma",
+          fontSize: 29,
+          fontWeight: "bold",
+          textAlign: "center",
+          paddingTop: 30,
+          width: "100%"
+        }}
+      >
+        {now.format("h:mm a")}
+      </div>
+    );
   };
 }
 
