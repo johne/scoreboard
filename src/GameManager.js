@@ -4,7 +4,7 @@ class GameManager {
   constructor(server) {
     this.server = server;
     this.dbManager = new DbManager();
-    this.pause = 10 * 1000;
+    this.pause = 5 * 1000;
   }
 
   async closeAllGames() {
@@ -23,9 +23,9 @@ class GameManager {
   async newGame(gameInfo) {
     await this.closeAllGames();
     gameInfo.created = new Date().getTime();
-    gameInfo.start = new Date().getTime() + 10 * 1000; // 10 second delay
-    gameInfo.end = gameInfo.start + gameInfo.duration * 60 * 1000;
+    gameInfo.start = new Date().getTime() + this.pause;
     gameInfo.timeLeft = gameInfo.duration * 60 * 1000;
+    gameInfo.end = gameInfo.start + gameInfo.timeLeft;
     gameInfo.paused = true;
     gameInfo.homeScore = gameInfo.homeScore || 0;
     gameInfo.awayScore = gameInfo.awayScore || 0;
@@ -86,6 +86,35 @@ class GameManager {
     this.server.broadcast({ currentGame });
   }
 
+  async awayMinusScore() {
+    const currentGame = await this.getCurrentGame();
+    currentGame.awayScore--;
+    await this.dbManager.update({ created: currentGame.created }, currentGame);
+
+    this.server.broadcast({ currentGame });
+  }
+
+  async homeMinusScore() {
+    const currentGame = await this.getCurrentGame();
+    currentGame.homeScore--;
+    await this.dbManager.update({ created: currentGame.created }, currentGame);
+
+    this.server.broadcast({ currentGame });
+  }
+
+  async overtime() {
+    const overtimeMins = 5;
+    const currentGame = await this.getCurrentGame();
+    currentGame.overtime = currentGame.overtime && 0;
+    currentGame.overtime += overtimeMins;
+    currentGame.timeLeft = overtimeMins * 60 * 1000;
+    currentGame.paused = true;
+
+    await this.dbManager.update({ created: currentGame.created }, currentGame);
+
+    this.server.broadcast({ currentGame });
+  }
+
   async currentGame() {
     const currentGame = await this.getCurrentGame();
 
@@ -104,8 +133,14 @@ class GameManager {
         return this.homeScore();
       case "awayScore":
         return this.awayScore();
+      case "homeMinusScore":
+        return this.homeMinusScore();
+      case "awayMinusScore":
+        return this.awayMinusScore();
       case "currentGame":
         return this.currentGame();
+      case "overtime":
+        return this.overtime();
     }
   }
 }
@@ -121,7 +156,8 @@ const gameStructure = {
   end: 123456789,
   timeLeft: 123,
   paused: true,
-  current: true
+  current: true,
+  overtime: 5
 };
 
 module.exports = GameManager;

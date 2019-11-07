@@ -18,7 +18,7 @@ const Controller = ({ currentGame, sendMessage }) => {
             gameInfo: {
               home: "lazy llamas",
               away: "polar puppy pops",
-              duration: 20
+              duration: 0.5
             }
           })
         }
@@ -56,6 +56,17 @@ const Controller = ({ currentGame, sendMessage }) => {
           }
         >
           {paused ? "unpause" : "pause"}
+        </button>
+      )}
+      {currentGame && finished && (
+        <button
+          onClick={() =>
+            sendMessage({
+              action: "overtime"
+            })
+          }
+        >
+          Overtime
         </button>
       )}
     </StyledDiv>
