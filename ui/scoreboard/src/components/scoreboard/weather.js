@@ -13,16 +13,15 @@ class Weather extends React.Component {
   render = () => {
     return (
       <div
-        style={{ width: "100%", paddingTop: 40, display: "inline-block" }}
+        style={{ width: "100%", paddingTop: 5, display: "inline-block" }}
         ref={el => (this.instance = el)}
       >
         <a
-          class="weatherwidget-io"
+          className="weatherwidget-io"
           href="https://forecast7.com/en/33d88n111d93/85331/?unit=us"
-          data-label_1="Cave Creek"
+          data-label_1="Ellis Center"
           data-label_2="Weather"
-          data-mode="Current"
-          data-days="3"
+          data-days="7"
           data-theme="original"
         >
           Cave Creek Weather

@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import styled from "styled-components";
-import Scoreboard from "./components/scoreboard";
+import Scoreboard from "./components/scoreboard/";
+import Controller from "./components/controller/";
 const Nes = require("@hapi/nes/lib/client");
 
 const StyledDiv = styled.div``;
@@ -20,13 +21,13 @@ class App extends React.Component {
     this.setState({ currentGame });
   };
 
-  sendMessage(msg) {
+  sendMessage = msg => {
     this.refWebSocket.request({
       method: "POST",
       path: "update",
       payload: JSON.stringify(msg)
     });
-  }
+  };
 
   componentDidMount() {
     this.refWebSocket = new Nes.Client("ws://Johns-MacBook-Pro.local:3001");
@@ -43,75 +44,35 @@ class App extends React.Component {
 
   render() {
     const { currentGame } = this.state;
-    const now = new Date().getTime();
-    const paused = currentGame && currentGame.paused;
-    const finished =
-      !paused && currentGame && currentGame.end && now > currentGame.end;
     return (
       <Router className="App">
         <StyledDiv>
           {currentGame && (
-            <Route
-              exact
-              path="/scoreboard"
-              render={props => (
-                <Scoreboard
-                  {...props}
-                  currentGame={currentGame}
-                  onComplete={this.onComplete}
-                />
-              )}
-            />
+            <React.Fragment>
+              <Route
+                exact
+                path="/scoreboard"
+                render={props => (
+                  <Scoreboard
+                    {...props}
+                    currentGame={currentGame}
+                    onComplete={this.onComplete}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/controller"
+                render={props => (
+                  <Controller
+                    {...props}
+                    currentGame={currentGame}
+                    sendMessage={this.sendMessage}
+                  />
+                )}
+              />
+            </React.Fragment>
           )}
-          <StyledDiv>
-            <button
-              onClick={() =>
-                this.sendMessage({
-                  action: "newGame",
-                  gameInfo: {
-                    home: "lazy llamas",
-                    away: "polar puppy pops",
-                    duration: 20
-                  }
-                })
-              }
-            >
-              New Game
-            </button>
-            {currentGame && (
-              <React.Fragment>
-                <button
-                  onClick={() =>
-                    this.sendMessage({
-                      action: "homeScore"
-                    })
-                  }
-                >
-                  homeScore
-                </button>
-                <button
-                  onClick={() =>
-                    this.sendMessage({
-                      action: "awayScore"
-                    })
-                  }
-                >
-                  away score
-                </button>
-              </React.Fragment>
-            )}
-            {currentGame && !finished && (
-              <button
-                onClick={() =>
-                  this.sendMessage({
-                    action: paused ? "unpause" : "pause"
-                  })
-                }
-              >
-                {paused ? "unpause" : "pause"}
-              </button>
-            )}
-          </StyledDiv>
         </StyledDiv>
       </Router>
     );

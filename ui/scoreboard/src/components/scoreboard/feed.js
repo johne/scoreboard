@@ -5,7 +5,7 @@ const htmlparser2 = require("htmlparser2");
 class Feed extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { images: [] };
+    this.state = { images: [], feedName: "ellisFamilyHoops" };
     this.fadeProperties = {
       duration: 5000,
       transitionDuration: 500,
@@ -38,18 +38,6 @@ class Feed extends React.Component {
               search.length,
               text.length - search.length - 1
             );
-            // parsed = JSON.parse(jsonText, (key, value) => {
-            //   console.log(key);
-            //   if (typeof value === "string") {
-            //     if (key === "src") {
-            //       return value;
-            //     } else {
-            //       return "";
-            //     }
-            //   } else {
-            //     return value;
-            //   }
-            // });
             parsed = JSON.parse(jsonText);
           }
         },
@@ -77,7 +65,8 @@ class Feed extends React.Component {
   };
 
   componentDidMount() {
-    fetch("https://www.instagram.com/explore/tags/elliskids/", {
+    const { feedName } = this.state;
+    fetch(`https://www.instagram.com/explore/tags/${feedName}/`, {
       method: "GET"
     })
       .then(result => {
@@ -89,7 +78,7 @@ class Feed extends React.Component {
   }
 
   render = () => {
-    const { images } = this.state;
+    const { images, feedName } = this.state;
     this.fadeProperties.defaultIndex = Math.floor(
       Math.random() * images.length
     );
@@ -110,13 +99,14 @@ class Feed extends React.Component {
                 width: "100%",
                 color: "white",
                 font: "Tahoma",
-                fontSize: 50,
+                fontSize: 59,
                 fontWeight: "bold",
                 textAlign: "center",
-                paddingTop: 40
+                paddingTop: 20,
+                paddingBottom: 10
               }}
             >
-              #ellisFamilyHoops
+              #{feedName}
             </div>
           </div>
         ))}

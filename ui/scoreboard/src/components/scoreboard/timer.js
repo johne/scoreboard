@@ -7,9 +7,10 @@ const ClockContainer = styled.div`
   text-align: center;
   width: 100%;
   color: white;
-  font-size: 150px;
+  font-size: 240px;
   font-family: "Arial Narrow";
-  padding-top: 70px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 const PauseCounter = styled.div`
