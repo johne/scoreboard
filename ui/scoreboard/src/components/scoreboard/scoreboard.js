@@ -42,11 +42,18 @@ const Scoreboard = ({ currentGame, onComplete }) => {
         </Col>
       </Row>
       <Row style={{ backgroundColor: "#1f567c" }}>
-        <Col md={5} style={{ border: "white solid 5px" }}>
-          <Clock />
+        <Col md={15} style={{ border: "white solid 5px" }}>
           <Weather />
         </Col>
-        <Col md={15} style={{ border: "white solid 5px" }}>
+        <Col md={5} style={{ border: "white solid 5px" }}>
+          <Clock />
+        </Col>
+      </Row>
+      <Row style={{ backgroundColor: "#1f567c" }}>
+        <Col md={10} style={{ border: "white solid 5px" }}>
+          <Feed />
+        </Col>
+        <Col md={10} style={{ border: "white solid 5px" }}>
           <Feed />
         </Col>
       </Row>

@@ -49,32 +49,46 @@ class Feed extends React.Component {
     parser.write(data);
     parser.end();
 
-    const topImagesRaw =
-      parsed.entry_data.TagPage[0].graphql.hashtag.edge_hashtag_to_top_posts
-        .edges;
-    const allRaw = parsed.entry_data.TagPage[0].graphql.hashtag.edge_hashtag_to_media.edges.slice(
-      0,
-      10
-    );
+    if (parsed.entry_data) {
+      const topImagesRaw =
+        parsed.entry_data.TagPage[0].graphql.hashtag.edge_hashtag_to_top_posts
+          .edges;
+      const allRaw = parsed.entry_data.TagPage[0].graphql.hashtag.edge_hashtag_to_media.edges.slice(
+        0,
+        10
+      );
 
-    const images = topImagesRaw.map(this.thumb).concat(allRaw.map(this.thumb));
+      const images = topImagesRaw
+        .map(this.thumb)
+        .concat(allRaw.map(this.thumb));
 
-    this.shuffleArray(images);
+      this.shuffleArray(images);
 
-    this.setState({ images });
+      this.setState({ images });
+    } else {
+      setTimeout(
+        (() => {
+          this._loadData();
+        },
+        1000)
+      );
+    }
   };
 
-  componentDidMount() {
+  _loadData = () => {
     const { feedName } = this.state;
     fetch(`https://www.instagram.com/explore/tags/${feedName}/`, {
       method: "GET"
     })
-      .then(result => {
-        result.text().then(html => this.parseResult(html));
-      })
+      .then(result => result.text())
+      .then(html => this.parseResult(html))
       .catch(err => {
         console.log(err);
       });
+  };
+
+  componentDidMount() {
+    this._loadData();
   }
 
   render = () => {
@@ -85,7 +99,10 @@ class Feed extends React.Component {
 
     console.log(this.fadeProperties.defaultIndex);
     return (
-      <Fade style={{ width: "100%", height: "100%" }} {...this.fadeProperties}>
+      <Fade
+        style={{ width: "100%", height: "100%", minHeight: 455 }}
+        {...this.fadeProperties}
+      >
         {this.state.images.map((imgInfo, index) => (
           <div key={index}>
             <img
@@ -99,7 +116,7 @@ class Feed extends React.Component {
                 width: "100%",
                 color: "white",
                 font: "Tahoma",
-                fontSize: 59,
+                fontSize: 25,
                 fontWeight: "bold",
                 textAlign: "center",
                 paddingTop: 20,

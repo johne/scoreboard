@@ -5,7 +5,8 @@ const ScoreConatiner = styled.div`
   width: 100%;
   height: 100%;
   text-align: "center";
-  padding-top: 15px;
+  padding-top: 25px;
+  padding-bottom: 15px;
   display: flex;
   flex-flow: column;
 `;
@@ -26,7 +27,7 @@ const Score = styled.div`
   font-size: 150px;
   font-family: "Tahoma";
   flex: 0 1 5px;
-  padding-bottom: 5px;
+  padding-bottom: 25px;
 `;
 
 const ScoreBlock = ({ name, score }) => {

@@ -8,6 +8,7 @@ const ClockContainer = styled.div`
   width: 100%;
   color: white;
   font-size: 240px;
+  min-height: 255px;
   font-family: "Arial Narrow";
   padding-top: 10px;
   padding-bottom: 10px;
@@ -112,7 +113,7 @@ class Timer extends React.Component {
     const now = new Date().getTime();
 
     return paused || now < start ? (
-      this.renderer({ minutes, seconds, milliseconds })
+      <div></div> //this.renderer({ minutes, seconds, milliseconds })
     ) : now < end + 1000 ? (
       <Countdown
         date={end}
