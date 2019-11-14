@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-
+import Controller from "./controller";
 const StyledDiv = styled.div``;
 
-const Controller = ({ currentGame, sendMessage }) => {
+const Controller2 = ({ currentGame, sendMessage }) => {
   const now = new Date().getTime();
   const paused = currentGame && currentGame.paused;
   const finished =

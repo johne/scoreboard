@@ -113,7 +113,7 @@ class Timer extends React.Component {
     const now = new Date().getTime();
 
     return paused || now < start ? (
-      <div></div> //this.renderer({ minutes, seconds, milliseconds })
+      this.renderer({ minutes, seconds, milliseconds })
     ) : now < end + 1000 ? (
       <Countdown
         date={end}
