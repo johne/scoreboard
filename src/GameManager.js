@@ -121,8 +121,20 @@ class GameManager {
     this.server.broadcast({ currentGame });
   }
 
+  async playPause() {
+    const currentGame = await this.getCurrentGame();
+
+    if (currentGame.paused) {
+      return this.pauseGame();
+    } else {
+      return this.unpauseGame();
+    }
+  }
+
   handleMessage(message) {
     switch (message.action) {
+      case "playPause":
+        return this.playPause();
       case "pause":
         return this.pauseGame();
       case "unpause":
