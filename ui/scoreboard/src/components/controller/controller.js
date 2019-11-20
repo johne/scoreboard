@@ -19,8 +19,8 @@ class Controller extends React.Component {
 
     const now = new Date().getTime();
     const paused = currentGame && currentGame.paused;
-    const finished =
-      !paused && currentGame && currentGame.end && now > currentGame.end;
+    const finished = true;
+    // !paused && currentGame && currentGame.end && now > currentGame.end;
 
     if (finished) {
       sendMessage({
@@ -28,7 +28,7 @@ class Controller extends React.Component {
         gameInfo: {
           home: "Dad",
           away: "Reef",
-          duration: 15
+          duration: 1
         }
       });
     } else {

@@ -125,9 +125,9 @@ class GameManager {
     const currentGame = await this.getCurrentGame();
 
     if (currentGame.paused) {
-      return this.pauseGame();
-    } else {
       return this.unpauseGame();
+    } else {
+      return this.pauseGame();
     }
   }
 
