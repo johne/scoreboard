@@ -11,7 +11,7 @@ const start = async () => {
 
   client.onUpdate = update => {
     console.log(update);
-    buzzer.update(update);
+    buzzer.processUpdate(update);
   };
 
   //   client.request({

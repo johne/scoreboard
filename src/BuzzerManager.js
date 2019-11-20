@@ -6,11 +6,11 @@ class BuzzerManager {
   }
 
   _buzzIt() {
-    this.timer = undefined;
-    this.buzzer.writeSync(1);
-    setTimeout(() => {
-      this.buzzer.writeSync(0);
-    }, 1300);
+    // this.timer = undefined;
+    // this.buzzer.writeSync(1);
+    // setTimeout(() => {
+    //   this.buzzer.writeSync(0);
+    // }, 300);
   }
 
   processUpdate(update) {
