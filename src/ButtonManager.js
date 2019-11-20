@@ -29,7 +29,12 @@ class ButtonManager {
       return;
     }
 
-    console.log("handling a button press", { value, action });
+    console.log("handling a button press", {
+      pressed: this.pressed,
+      value,
+      action
+    });
+
     const released = this.pressed[action] === 1 && value === 0;
     this.pressed[action] = value;
 
