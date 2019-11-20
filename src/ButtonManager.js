@@ -39,6 +39,11 @@ class ButtonManager {
     this.pressed[action] = value;
 
     if (released) {
+      console.log("posting action", {
+        pressed: this.pressed,
+        value,
+        action
+      });
       this.client.request({
         method: "POST",
         path: "update",
