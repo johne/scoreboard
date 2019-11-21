@@ -4,13 +4,13 @@ class ButtonManager {
   constructor(client) {
     this.client = client;
 
-    this.homeScore = this._setupButtom(22, (err, value) => {
+    this.homeScore = this._setupButtom(16, (err, value) => {
       this._handleButton(err, value, "homeScore");
     });
-    this.awayScore = this._setupButtom(23, (err, value) => {
+    this.awayScore = this._setupButtom(20, (err, value) => {
       this._handleButton(err, value, "awayScore");
     });
-    this.playPause = this._setupButtom(24, (err, value) => {
+    this.playPause = this._setupButtom(21, (err, value) => {
       this._handleButton(err, value, "playPause");
     });
 
