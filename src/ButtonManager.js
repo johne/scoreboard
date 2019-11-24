@@ -18,8 +18,10 @@ class ButtonManager {
   }
 
   _setupButtom(gpio, callback) {
+    console.log("setting up button", { gpio });
     const button = new Gpio(gpio, "in", "both", { debounceTimeout: 10 });
     button.watch(callback);
+    console.log("set up button", { gpio });
     return button;
   }
 
