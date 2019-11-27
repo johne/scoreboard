@@ -14,6 +14,9 @@ class ButtonManager {
       this._handleButton(err, value, "playPause");
     });
 
+    this.led = new Gpio(25, "out");
+    this.led.writeSync(1);
+
     this.pressed = {};
   }
 
