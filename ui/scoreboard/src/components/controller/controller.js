@@ -26,9 +26,9 @@ class Controller extends React.Component {
       sendMessage({
         action: "newGame",
         gameInfo: {
-          home: "Dad",
-          away: "Reef",
-          duration: 1
+          home: "lazy llamas",
+          away: "penguin polar pops",
+          duration: 15
         }
       });
     } else {
