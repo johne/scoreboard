@@ -24,6 +24,18 @@ const provision = async () => {
 
   server.route({
     method: "GET",
+    path: "/history",
+    config: {
+      id: "history",
+      handler: request => {
+        console.log(request);
+        return gameManager.history().then(res => JSON.stringify(res));
+      }
+    }
+  });
+
+  server.route({
+    method: "GET",
     path: "/{param*}",
     handler: {
       directory: {

@@ -45,13 +45,16 @@ class DbManager {
 
   find(query) {
     return new Promise((resolve, reject) => {
-      this.gameData.find(query).toArray((err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
+      this.gameData
+        .find(query)
+        .sort({ created: -1 })
+        .toArray((err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
     });
   }
 }

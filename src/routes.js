@@ -10,6 +10,9 @@ const fileHandler = {
   }
 };
 
-const routes = [{ method: "GET", path: "/scoreboard", config: fileHandler }];
+const routes = [
+  { method: "GET", path: "/scoreboard", config: fileHandler },
+  { method: "GET", path: "/controller", config: fileHandler }
+];
 
 module.exports = routes;

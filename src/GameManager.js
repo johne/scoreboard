@@ -8,7 +8,6 @@ class GameManager {
   }
 
   async closeAllGames() {
-    const now = new Date().getTime();
     const games = await this.dbManager.find({ current: true });
 
     games &&
@@ -33,7 +32,7 @@ class GameManager {
 
     await this.dbManager.insert(gameInfo);
 
-    this.server.broadcast({ currentGame: gameInfo });
+    this.announceGame();
   }
 
   getCurrentGame() {
@@ -54,7 +53,7 @@ class GameManager {
 
     this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async unpauseGame() {
@@ -67,7 +66,7 @@ class GameManager {
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async homeScore() {
@@ -75,7 +74,7 @@ class GameManager {
     currentGame.homeScore++;
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async awayScore() {
@@ -83,7 +82,7 @@ class GameManager {
     currentGame.awayScore++;
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async awayMinusScore() {
@@ -91,7 +90,7 @@ class GameManager {
     currentGame.awayScore--;
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async homeMinusScore() {
@@ -99,7 +98,7 @@ class GameManager {
     currentGame.homeScore--;
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async overtime() {
@@ -112,13 +111,11 @@ class GameManager {
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async currentGame() {
-    const currentGame = await this.getCurrentGame();
-
-    this.server.broadcast({ currentGame });
+    this.announceGame();
   }
 
   async playPause() {
@@ -154,6 +151,10 @@ class GameManager {
       case "overtime":
         return this.overtime();
     }
+  }
+
+  history() {
+    return this.dbManager.find();
   }
 }
 
