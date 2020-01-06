@@ -8,5 +8,5 @@ if pgrep -x "controller" > /dev/null
 then
     echo "Running"
 else
-    node /home/pi/scoreboard/controller &
+    /usr/local/bin/node /home/pi/scoreboard/controller & >/tmp/controller.log 2>&1
 fi
