@@ -17,6 +17,8 @@ class ButtonManager {
     this.led = new Gpio(25, "out");
     this.led.writeSync(1);
 
+    this.connected = true;
+
     this.interval = setInterval(() => {
       if (this.connected) {
         console.log("writing");
