@@ -17,11 +17,8 @@ class ButtonManager {
     this.led = new Gpio(25, "out");
     this.led.writeSync(1);
 
-    this.ledValue = 1;
-
     this.interval = setInterval(() => {
-      this.led.writeSync(this.ledValue);
-      this.ledValue === 0 ? 1 : 0;
+      this.led.writeSync(1);
     }, 50);
 
     this.pressed = {};
