@@ -21,7 +21,6 @@ class ButtonManager {
 
     this.interval = setInterval(() => {
       if (this.connected) {
-        console.log("writing");
         this.led.writeSync(1);
       }
     }, 50);
