@@ -11,6 +11,7 @@ import threading
 # Setup the Pin with Internal pullups enabled and PIN in reading mode.  
 GPIO.setmode(GPIO.BCM)  
 GPIO.setup(3, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)  
+GPIO.setup(25, GPIO.OUT, initial=GPIO.LOW)
 
 t = 0
 
@@ -35,4 +36,8 @@ GPIO.add_event_detect(3, GPIO.BOTH, callback = button_event, bouncetime = 50)
  
 # Now wait!  
 while 1:  
-    time.sleep(0.1) 
+    time.sleep(0.1)     
+	GPIO.output(25, GPIO.HIGH) # Turn on
+    sleep(1)                  # Sleep for 1 second
+    GPIO.output(25, GPIO.LOW)  # Turn off
+    sleep(10)                  # Sleep for 1 second
