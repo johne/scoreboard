@@ -35,9 +35,8 @@ def button_event(channel):
 GPIO.add_event_detect(3, GPIO.BOTH, callback = button_event, bouncetime = 50)  
  
 # Now wait!  
-while 1:  
-    time.sleep(0.1)     
+while 1:
 	GPIO.output(25, GPIO.HIGH) # Turn on
-    time.sleep(1)              # Sleep for 1 second
-    GPIO.output(25, GPIO.LOW)  # Turn off
-    time.sleep(4)              # Sleep for 4 second
+	time.sleep(1)              # Sleep for 1 second
+	GPIO.output(25, GPIO.LOW)  # Turn off
+	time.sleep(4)              # Sleep for 4 second
