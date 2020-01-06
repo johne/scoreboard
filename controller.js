@@ -14,6 +14,13 @@ const start = async () => {
     buzzer.processUpdate(update);
   };
 
+  client.onDisconnect = (willReconnect, log) => {
+    console.log({ willReconnect, log });
+    if (!willReconnect) {
+      process.exit(1);
+    }
+  };
+
   //   client.request({
   //     method: "POST",
   //     path: "update",
