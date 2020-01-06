@@ -18,10 +18,17 @@ class ButtonManager {
     this.led.writeSync(1);
 
     this.interval = setInterval(() => {
-      this.led.writeSync(1);
+      if (this.connected) {
+        console.log("writing");
+        this.led.writeSync(1);
+      }
     }, 50);
 
     this.pressed = {};
+  }
+
+  setConnected(connected) {
+    this.connected = connected;
   }
 
   _setupButtom(gpio, callback) {
