@@ -40,4 +40,4 @@ while 1:
 	GPIO.output(25, GPIO.HIGH) # Turn on
     sleep(1)                  # Sleep for 1 second
     GPIO.output(25, GPIO.LOW)  # Turn off
-    sleep(10)                  # Sleep for 1 second
+    sleep(4)                  # Sleep for 4 second
