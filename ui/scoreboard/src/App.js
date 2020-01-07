@@ -11,14 +11,27 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      currentGame: {}
+      currentGame: {},
+      historyTeams: [
+        "dad@reef",
+        "reef@dad",
+        "penguin polar pops@lazy llamas",
+        "lazy llamas@penguin polar pops",
+        "something else"
+      ]
     };
   }
 
   handleData = data => {
+    console.log(data);
+
     const { currentGame } = data;
 
-    this.setState({ currentGame });
+    if (currentGame) {
+      this.setState(prev => {
+        return { currentGame };
+      });
+    }
   };
 
   sendMessage = msg => {
@@ -29,21 +42,54 @@ class App extends React.Component {
     });
   };
 
+  getHistory() {
+    fetch("http://johns-macbook-pro.local:3001/history", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    })
+      .then(res => {
+        console.log("here");
+        return res.json();
+      })
+      .then(res => {
+        const historyTeams = Array.from(
+          res.reduce((list, game) => {
+            return list
+              .add(`${game.home}@${game.away}`)
+              .add(`${game.away}@${game.home}`);
+          }, new Set())
+        );
+        console.log(historyTeams);
+        this.setState(prev => {
+          return { historyTeams };
+        });
+      })
+      .catch(err => {
+        debugger;
+        console.log(err);
+      });
+  }
+
   componentDidMount() {
+    console.log("here again");
     this.refWebSocket = new Nes.Client("ws://Johns-MacBook-Pro.local:3001");
-    this.refWebSocket.connect().then(something => {
-      console.log({ something });
+    this.refWebSocket.connect().then(() => {
       this.refWebSocket.onUpdate = this.handleData;
       this.sendMessage({ action: "currentGame" });
+      this.getHistory();
     });
   }
 
   onComplete = () => {
-    this.sendMessage({ action: "currentGame" });
+    //this.sendMessage({ action: "currentGame" });
   };
 
   render() {
-    const { currentGame } = this.state;
+    const { currentGame, historyTeams } = this.state;
+
     return (
       <Router className="App">
         <StyledDiv>
@@ -68,6 +114,8 @@ class App extends React.Component {
                     {...props}
                     currentGame={currentGame}
                     sendMessage={this.sendMessage}
+                    onComplete={this.onComplete}
+                    historyTeams={historyTeams}
                   />
                 )}
               />

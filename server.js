@@ -8,6 +8,9 @@ const routes = require("./src/routes");
 const server = new Hapi.Server({
   port: 3001,
   routes: {
+    cors: {
+      origin: ["*"]
+    },
     files: {
       relativeTo: Path.join(__dirname, "ui/scoreboard/build")
     }
