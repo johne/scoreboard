@@ -4,7 +4,7 @@
 # -x flag only match processes whose name (or command line if -f is
 # specified) exactly match the pattern. 
 
-if pgrep -x "score-controller.js" > /dev/null
+if  pgrep -xf '/usr/local/bin/node /home/pi/scoreboard/score-controller.js' > /dev/null
 then
     echo "Running"
 else
