@@ -1,3 +1,5 @@
+#!/usr/local/bin/node
+
 const Nes = require("@hapi/nes");
 const ButtonManager = require("./src/ButtonManager");
 const BuzzerManager = require("./src/BuzzerManager");
