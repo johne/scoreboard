@@ -1,4 +1,4 @@
-#!node
+#!/usr/bin/node
 
 const Path = require("path");
 const Hapi = require("@hapi/hapi");
