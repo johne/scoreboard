@@ -6,7 +6,7 @@ const GameManager = require("./src/GameManager");
 const routes = require("./src/routes");
 
 const server = new Hapi.Server({
-  port: 3001,
+  port: 3000,
   routes: {
     cors: {
       origin: ["*"]

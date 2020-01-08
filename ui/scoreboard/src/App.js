@@ -43,7 +43,7 @@ class App extends React.Component {
   };
 
   getHistory() {
-    fetch("http://johns-macbook-pro.local:3001/history", {
+    fetch("http://ellis-scoreboard.local:3000/history", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log("here again");
-    this.refWebSocket = new Nes.Client("ws://Johns-MacBook-Pro.local:3001");
+    this.refWebSocket = new Nes.Client("ws://ellis-scoreboard.local:3000");
     this.refWebSocket.connect().then(() => {
       this.refWebSocket.onUpdate = this.handleData;
       this.sendMessage({ action: "currentGame" });

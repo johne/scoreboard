@@ -2,7 +2,7 @@ const Nes = require("@hapi/nes");
 const ButtonManager = require("./src/ButtonManager");
 const BuzzerManager = require("./src/BuzzerManager");
 
-const client = new Nes.Client("ws://Johns-MacBook-Pro.local:3001");
+const client = new Nes.Client("ws://ellis-scoreboard.local:3000");
 const start = async () => {
   await client.connect();
 
