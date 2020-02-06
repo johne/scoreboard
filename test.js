@@ -1,16 +1,11 @@
-const player = require("node-wav-player");
+const Nes = require("@hapi/nes");
 
-const path = `${__dirname}/./ui/scoreboard/public/air-horn.wav`;
+const client = new Nes.Client("ws://ellis-scoreboard.local:3000");
 
-console.log(path);
-
-player
-  .play({
-    path
+client.request({
+  method: "POST",
+  path: "update",
+  payload: JSON.stringify({
+    action: "playPause"
   })
-  .then(() => {
-    console.log("The wav file started to be played successfully.");
-  })
-  .catch(error => {
-    console.error(error);
-  });
+});

@@ -20,6 +20,9 @@ class BuzzerManager {
   }
 
   processUpdate(update) {
+    console.log("update from server");
+    console.log(update);
+
     const { paused, end } = update;
     const now = new Date().getTime();
 
