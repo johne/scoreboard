@@ -30,7 +30,9 @@ class BuzzerManager {
     this.timer && clearTimeout(this.timer);
 
     if (!paused && end > now) {
+      console.log("setting timeout");
       this.timer = setTimeout(() => {
+        console.log("timeout!!!");
         this._buzzIt();
       }, end - now);
     }
