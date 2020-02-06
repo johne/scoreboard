@@ -21,6 +21,7 @@
     "@hapi/hapi": "^18.4.0",
     "@hapi/inert": "^5.2.2",
     "@hapi/nes": "^11.2.2",
+    "node-wav-player": "^0.1.0",
     "onoff": "^5.0.0",
     "pigpio": "^2.0.1",
     "play-sound": "^1.1.3",

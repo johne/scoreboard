@@ -1,18 +1,22 @@
-const Gpio = require("pigpio").Gpio;
+const player = require("node-wav-player");
 
 class BuzzerManager {
   construbtor() {}
 
   _buzzIt() {
     console.log("buzzing");
+    const path = `${__dirname}/../ui/scoreboard/public/air-horn.wav`;
 
-    // todo put it here
-
-    setTimeout(() => {
-      console.log("stopping");
-      this.buzzer1.hardwarePwmWrite(0, 0);
-      this.buzzer2.hardwarePwmWrite(0, 0);
-    }, 300);
+    player
+      .play({
+        path
+      })
+      .then(() => {
+        console.log("The wav file started to be played successfully.");
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   processUpdate(update) {
