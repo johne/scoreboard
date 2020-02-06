@@ -24,7 +24,13 @@ class BuzzerManager {
     console.log(update);
     console.log(Date.now());
 
-    const { paused, end } = update;
+    const { currentGame } = update;
+
+    if (!currentGame) {
+      return;
+    }
+
+    const { paused, end } = currentGame;
     const now = Date.now();
 
     this.timer && clearTimeout(this.timer);
