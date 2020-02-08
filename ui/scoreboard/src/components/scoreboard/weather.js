@@ -13,7 +13,7 @@ class Weather extends React.Component {
   render = () => {
     return (
       <div
-        style={{ width: "100%", paddingTop: 15, display: "inline-block" }}
+        style={{ width: "100%", display: "inline-block" }}
         ref={el => (this.instance = el)}
       >
         <a

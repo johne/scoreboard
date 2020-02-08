@@ -16,7 +16,7 @@ setConfiguration({
   gutterWidth: 1,
   gridColumns: 20,
   breakpoints: [576, 720, 992, 1200],
-  containerWidths: [540, 710, 1210, 1210]
+  containerWidths: [540, 710, 1280, 1280]
 });
 
 const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {

@@ -24,12 +24,11 @@ class Clock extends React.Component {
         style={{
           color: "white",
           font: "Tahoma",
-          fontSize: 29,
+          fontSize: 25,
           fontWeight: "bold",
           textAlign: "center",
-          paddingTop: 15,
-          minHeight: 125,
-          width: "100%"
+          width: "100%",
+          paddingTop: "35px"
         }}
       >
         {now.tz("America/Phoenix").format("h:mm a")}

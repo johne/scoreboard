@@ -7,11 +7,9 @@ const ClockContainer = styled.div`
   text-align: center;
   width: 100%;
   color: white;
-  font-size: 240px;
-  min-height: 255px;
+  font-size: 150px;
   font-family: "Arial Narrow";
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 40px;
 `;
 
 const PauseCounter = styled.div`
@@ -19,6 +17,23 @@ const PauseCounter = styled.div`
   font-size: 100px;
   text-align: right;
   padding-right: 30px;
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  animation-duration: 1.1s;
+  animation-name: countdown${props => props.seconds};
+  animation-timing-function: ease-in;
+  
+  @keyframes countdown${props => props.seconds} {
+    from {
+      transform: scale(0.5);
+      transform-origin: 100% 100%;
+    }
+    to {
+      transform: scale(2.5);
+      transform-origin: 100% 100%;
+    }
+  }
 `;
 
 class Timer extends React.Component {
@@ -63,7 +78,7 @@ class Timer extends React.Component {
     if (completed) {
       return <React.Fragment />;
     } else {
-      return <PauseCounter>{seconds}</PauseCounter>;
+      return <PauseCounter seconds={seconds}>{seconds + 1}</PauseCounter>;
     }
   };
 
@@ -83,7 +98,7 @@ class Timer extends React.Component {
               {this.pad(seconds, 2)}
               {milliseconds !== undefined && (
                 <React.Fragment>
-                  .{Math.round(milliseconds / 100)}
+                  .{Math.round(milliseconds + 1 / 100)}
                 </React.Fragment>
               )}
             </span>

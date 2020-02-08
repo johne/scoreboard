@@ -116,7 +116,7 @@ class Feed extends React.Component {
                 width: "100%",
                 color: "white",
                 font: "Tahoma",
-                fontSize: 25,
+                fontSize: 50,
                 fontWeight: "bold",
                 textAlign: "center",
                 paddingTop: 20,
