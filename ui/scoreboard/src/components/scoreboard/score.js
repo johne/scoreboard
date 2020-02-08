@@ -9,7 +9,7 @@ const ScoreConatiner = styled.div`
   padding-bottom: 15px;
   display: flex;
   flex-flow: column;
-  min-height: 220px;
+  min-height: 310px;
 `;
 
 const Team = styled.div`
