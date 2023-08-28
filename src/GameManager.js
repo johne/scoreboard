@@ -1,10 +1,12 @@
 const DbManager = require("./DbManager");
+const RemoteManager = require("./RemoteManager");
 
 class GameManager {
   constructor(server) {
     this.server = server;
     this.dbManager = new DbManager();
     this.pause = 5 * 1000;
+    this.remoteManager = new RemoteManager(this);
   }
 
   async closeAllGames() {
@@ -29,6 +31,13 @@ class GameManager {
     gameInfo.homeScore = gameInfo.homeScore || 0;
     gameInfo.awayScore = gameInfo.awayScore || 0;
     gameInfo.current = true;
+    gameInfo.shotClock = gameInfo.shotClock || 24;
+    gameInfo.shotClockEnd = gameInfo.start + gameInfo.shotClock * 60 * 1000;
+    gameInfo.shotClockLeft = gameInfo.shotClock * 60 * 1000;
+    gameInfo.controllers = gameInfo.controllers || {
+      teal: "home",
+      yellow: "away"
+    };
 
     await this.dbManager.insert(gameInfo);
 
@@ -49,6 +58,7 @@ class GameManager {
     const currentGame = await this.getCurrentGame();
 
     currentGame.timeLeft = currentGame.end - now;
+    currentGame.shotClockLeft = currentGame.shotClockEnd - now;
     currentGame.paused = true;
 
     this.dbManager.update({ created: currentGame.created }, currentGame);
@@ -62,6 +72,7 @@ class GameManager {
 
     currentGame.start = now + this.pause;
     currentGame.end = currentGame.start + currentGame.timeLeft;
+    currentGame.shotClockEnd = currentGame.start + shotClockLeft;
     currentGame.paused = false;
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);
@@ -114,6 +125,18 @@ class GameManager {
     this.announceGame();
   }
 
+  async shotClockReset() {
+    const now = new Date().getTime();
+    const currentGame = await this.getCurrentGame();
+
+    currentGame.shotClockLeft = currentGame.shotClock * 60 * 1000;
+    currentGame.shotClockEnd = now + this.pause + currentGame.shotClockLeft;
+
+    await this.dbManager.update({ created: currentGame.created }, currentGame);
+
+    this.announceGame();
+  }
+
   async currentGame() {
     this.announceGame();
   }
@@ -126,6 +149,12 @@ class GameManager {
     } else {
       return this.pauseGame();
     }
+  }
+
+  async addSecs(secs) {
+    const currentGame = await this.getCurrentGame();
+    currentGame.end += secs * 1000;
+    this.announceGame();
   }
 
   handleMessage(message) {
@@ -150,6 +179,16 @@ class GameManager {
         return this.currentGame();
       case "overtime":
         return this.overtime();
+      case "shotClock":
+        return this.shotClockReset();
+      case "add5Seconds":
+        return this.addSecs(5);
+      case "add20Seconds":
+        return this.addSecs(20);
+      case "remove5Seconds":
+        return this.addSecs(-5);
+      case "remove20Seconds":
+        return this.addSecs(-20);
     }
   }
 
