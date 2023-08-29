@@ -32,8 +32,11 @@ class GameManager {
     gameInfo.awayScore = gameInfo.awayScore || 0;
     gameInfo.current = true;
     gameInfo.shotClock = gameInfo.shotClock || 24;
-    gameInfo.shotClockEnd = gameInfo.start + gameInfo.shotClock * 60 * 1000;
-    gameInfo.shotClockLeft = gameInfo.shotClock * 60 * 1000;
+    gameInfo.shotClockEnd = gameInfo.start + gameInfo.shotClock * 1000;
+    gameInfo.shotClockLeft = gameInfo.shotClock * 1000;
+
+    console.log("controllers", gameInfo.controllers);
+
     gameInfo.controllers = gameInfo.controllers || {
       teal: "home",
       yellow: "away"
@@ -50,7 +53,12 @@ class GameManager {
 
   async announceGame() {
     const currentGame = await this.getCurrentGame();
-    this.server.broadcast({ currentGame });
+
+    const connectedControllers = this.remoteManager.getConnected();
+
+    this.server.broadcast({
+      currentGame: { ...currentGame, connectedControllers }
+    });
   }
 
   async pauseGame() {
@@ -72,7 +80,7 @@ class GameManager {
 
     currentGame.start = now + this.pause;
     currentGame.end = currentGame.start + currentGame.timeLeft;
-    currentGame.shotClockEnd = currentGame.start + shotClockLeft;
+    currentGame.shotClockEnd = currentGame.start + currentGame.shotClockLeft;
     currentGame.paused = false;
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);
@@ -129,8 +137,8 @@ class GameManager {
     const now = new Date().getTime();
     const currentGame = await this.getCurrentGame();
 
-    currentGame.shotClockLeft = currentGame.shotClock * 60 * 1000;
-    currentGame.shotClockEnd = now + this.pause + currentGame.shotClockLeft;
+    currentGame.shotClockLeft = currentGame.shotClock * 1000;
+    currentGame.shotClockEnd = now + currentGame.shotClockLeft;
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
@@ -154,6 +162,9 @@ class GameManager {
   async addSecs(secs) {
     const currentGame = await this.getCurrentGame();
     currentGame.end += secs * 1000;
+    currentGame.timeLeft += secs * 1000;
+    await this.dbManager.update({ created: currentGame.created }, currentGame);
+
     this.announceGame();
   }
 

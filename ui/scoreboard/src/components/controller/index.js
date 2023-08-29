@@ -11,6 +11,7 @@ import {
   SelectedTeam,
   SubmitButton
 } from "./controller.styled";
+import ShotClock from "../scoreboard/shotClock";
 
 setConfiguration({
   gutterWidth: 1,
@@ -19,6 +20,9 @@ setConfiguration({
   containerWidths: [540, 710, 1280, 1280]
 });
 
+const teal = ["reef", "lazy llamas"];
+const yellow = ["dad", "idk"];
+
 const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
   const { home, homeScore, away, awayScore } = currentGame;
 
@@ -26,10 +30,17 @@ const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
   const [teamNames, setTeamNames] = React.useState(historyTeams[0]);
 
   const newGameClick = () => {
-    console.log("new game");
+    console.log("new game here");
     const [away, home] = teamNames.split("@");
+    const controllers = {
+      teal: teal.includes(home) ? "home" : "away",
+      yellow: yellow.includes(home) ? "home" : "away"
+    };
 
-    sendMessage({ action: "newGame", gameInfo: { home, away, duration } });
+    sendMessage({
+      action: "newGame",
+      gameInfo: { home, away, duration, controllers }
+    });
   };
 
   const onTimerClick = () => {
@@ -102,6 +113,9 @@ const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
       <Row style={{ backgroundColor: "#1f567c" }} onClick={onTimerClick}>
         <Col style={{ border: "white solid 5px" }}>
           <Timer {...currentGame} onComplete={onComplete} />
+        </Col>
+        <Col style={{ border: "white solid 5px" }}>
+          <ShotClock {...currentGame} onComplete={onComplete} />
         </Col>
       </Row>
       <Row style={{ backgroundColor: "#1f567c" }}>

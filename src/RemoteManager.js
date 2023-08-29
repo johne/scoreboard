@@ -18,10 +18,10 @@ const Y = 23;
 const actionMap = {
   [L]: "Score",
   [R]: "MinusScore",
-  [D_RIGHT]: "subtract5Seconds",
-  [D_LEFT]: "add5Seconds",
-  [D_UP]: "add20Seconds",
-  [D_DOWN]: "subtract20Seconds",
+  [D_RIGHT]: "add20Seconds",
+  [D_LEFT]: "remove20Seconds",
+  [D_UP]: "add5Seconds",
+  [D_DOWN]: "remove5Seconds",
   [A]: "playPause",
   [B]: "playPause",
   [X]: "shotClock",
@@ -38,14 +38,39 @@ class RemoteManager {
     this._connectWatcher();
   }
 
+  getConnected() {
+    return Object.values(this.keyboards).map(kbd =>
+      kbd.address === TEAL_REMOTE
+        ? "teal"
+        : kbd.address === YELLOW_REMOTE
+        ? "yellow"
+        : ""
+    );
+  }
+
   _connectWatcher() {
     fs.watch("/dev/input", (event, filename) => {
+      console.log({ event, filename });
       if (event === "rename") {
+        console.log("killing keyboard" + filename);
         this.keyboards[filename] = null;
       } else if (this.keyboards[filename] === null) {
+        try {
+          fs.accessSync(`/dev/input/${filename}`, fs.constants.R_OK);
+        } catch (err) {
+          console.log("not ready?");
+          return;
+        }
+
+        this.keyboards[filename] = { settingUp: true };
+        console.log("setting up keyboard" + filename);
         this._setupKeyboard(filename);
       }
     });
+
+    this._setupKeyboard("event1");
+    this._setupKeyboard("event2");
+    this._setupKeyboard("event3");
   }
 
   _setupKeyboard(filename) {
@@ -60,28 +85,35 @@ class RemoteManager {
           return acc;
         }, {})
       )
+      .map(info => ({ ...info, address: info["U: Uniq"]?.toUpperCase() }))
       .find(
         group =>
           group["N: Name"] === '"8BitDo Zero 2 gamepad Keyboard"' &&
-          group["H: Handlers"].includes("event2")
+          group["H: Handlers"].includes(filename)
       );
 
-    if (info && [TEAL_REMOTE, YELLOW_REMOTE].includes(info["U: Uniq"])) {
-      this._watchKeyboard(filename, info["U: Uniq"]);
+    console.log("found info", info);
+
+    if (info && [TEAL_REMOTE, YELLOW_REMOTE].includes(info.address)) {
+      this._watchKeyboard(filename, info.address);
     }
   }
 
   _watchKeyboard(filename, address) {
-    const input = new InputEvent(`/dev/input/${filename}`);
-
-    const keyboard = new InputEvent.Keyboard(input);
+    console.log("watching keyboard", { filename, address });
+    const keyboard = new InputEvent.Keyboard(`/dev/input/${filename}`);
 
     keyboard.on("keyup", data => this._processKey(data, address));
-    this.keyboards[filename] = keyboard;
+    this.keyboards[filename] = { keyboard, address };
   }
 
   async _scoreAction(action, address) {
+    const requests = process._getActiveRequests();
+    const handles = process._getActiveHandles();
+
+    console.log("getting current game", { requests, handles });
     const currentGame = await this.gameManager.getCurrentGame();
+    console.log("got current game");
 
     const currentColor = address === TEAL_REMOTE ? "teal" : "yellow";
 
@@ -91,16 +123,19 @@ class RemoteManager {
   }
 
   async _processKey(data, address) {
+    console.log("processing key", { data, address });
     let action = actionMap[data.code];
 
     if (!action) {
-      // ignore different key
+      console.log("some unknown action", data);
       return;
     }
 
     if (action === "Score" || action === "MinusScore") {
       action = await this._scoreAction(action, address);
     }
+
+    console.log("sending action", { action });
 
     this.gameManager.handleMessage({ action });
   }
