@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import styled from "styled-components";
 import Scoreboard from "./components/scoreboard/";
 import Controller from "./components/controller/";
+import Layout from "./components/layout";
 const Nes = require("@hapi/nes/lib/client");
 
 const StyledDiv = styled.div``;
@@ -106,6 +107,7 @@ class App extends React.Component {
                   />
                 )}
               />
+              <Route exact path="/layout" render={props => <Layout />} />
               <Route
                 exact
                 path="/controller"
