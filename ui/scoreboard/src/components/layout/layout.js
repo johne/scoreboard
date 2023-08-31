@@ -9,8 +9,8 @@ setConfiguration({
 });
 
 const Layout = () => {
-  const cols = new Array(100).fill(100);
-  const rows = new Array(100).fill(100).map((row, index) => (
+  const cols = new Array(38).fill(38);
+  const rows = new Array(21).fill(21).map((row, index) => (
     <tr key={`row-${index}`}>
       {cols.map((col, colIdx) => (
         <td
@@ -29,12 +29,15 @@ const Layout = () => {
 
   return (
     <table
+      cellspacing="0"
+      cellpadding="0"
       style={{
         padding: "5px",
         paddingBottom: "0px",
         tableLayout: "fixed",
-        width: "6000px",
-        backgroundColor: "black"
+        width: "1500px",
+        backgroundColor: "red",
+        border: "1px solid"
       }}
     >
       {rows}

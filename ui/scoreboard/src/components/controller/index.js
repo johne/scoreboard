@@ -21,7 +21,7 @@ setConfiguration({
 });
 
 const teal = ["reef", "lazy llamas"];
-const yellow = ["dad", "idk"];
+const yellow = ["dad", "idk", "polar penguin pops"];
 
 const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
   const { home, homeScore, away, awayScore } = currentGame;

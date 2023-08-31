@@ -134,10 +134,12 @@ class GameManager {
   }
 
   async shotClockReset() {
-    const now = new Date().getTime();
+    const now = Math.floor(new Date().getTime() / 1000) * 1000;
     const currentGame = await this.getCurrentGame();
 
-    currentGame.shotClockLeft = currentGame.shotClock * 1000;
+    const mils = currentGame.end % 1000;
+
+    currentGame.shotClockLeft = currentGame.shotClock * 1000 + mils;
     currentGame.shotClockEnd = now + currentGame.shotClockLeft;
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);

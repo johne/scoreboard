@@ -95,7 +95,7 @@ class ShotClock extends React.Component {
     console.log("shot clock:" + (now - shotClockEnd));
 
     return paused || now < start ? (
-      <div style={{ minHeight: "30px" }} />
+      <div style={{ height: "100%" }}>--</div>
     ) : now < shotClockEnd ? (
       <Countdown
         date={shotClockEnd}

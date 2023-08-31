@@ -1,6 +1,6 @@
 #!/bin/bash
 
-xset dpms 600 600 600
+xset dpms 0 0 0
 
 unclutter -idle 0.5 -root &
 

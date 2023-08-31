@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ScoreConatiner = styled.div`
+const ScoreContainer = styled.div`
   width: 100%;
   height: 100%;
   text-align: "center";
@@ -9,14 +9,13 @@ const ScoreConatiner = styled.div`
   padding-bottom: 15px;
   display: flex;
   flex-flow: column;
-  min-height: 270px;
 `;
 
 const Team = styled.div`
   text-align: center;
   width: 100%;
   color: white;
-  font-size: 50px;
+  font-size: 100px;
   font-family: "Tahoma";
   flex: 1 1 auto;
   padding-top: 10px;
@@ -34,10 +33,10 @@ const Score = styled.div`
 
 const ScoreBlock = ({ name, score }) => {
   return (
-    <ScoreConatiner>
+    <ScoreContainer>
       <Team>{name}</Team>
       <Score>{score}</Score>
-    </ScoreConatiner>
+    </ScoreContainer>
   );
 };
 
