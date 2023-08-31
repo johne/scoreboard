@@ -8,5 +8,5 @@ if pgrep -x "score-server.js" > /dev/null
 then
     echo "Running"
 else
-    /home/pi/scoreboard/score-server.js >/tmp/server.log 2>&1 &
+    /home/john/scoreboard/score-server.js >/tmp/server.log 2>&1 &
 fi
