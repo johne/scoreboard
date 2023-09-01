@@ -25,7 +25,7 @@ const Score = styled.div`
   width: 100%;
   color: white;
   font-weight: bold;
-  font-size: 100px;
+  font-size: 150px;
   font-family: "Tahoma";
   flex: 0 1 5px;
   padding-bottom: 25px;

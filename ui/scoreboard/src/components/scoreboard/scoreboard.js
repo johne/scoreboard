@@ -58,21 +58,21 @@ const Scoreboard = ({ currentGame, onComplete }) => {
             style={{
               padding: 0,
               marginLeft: 0,
-              maxHeight: "555px",
+              height: "555px",
               overflow: "hidden"
             }}
           >
-            <Row style={{ height: "48%" }}>
+            <Row style={{ height: "270px" }}>
               <Col>
                 <Timer {...currentGame} onComplete={onComplete} />
               </Col>
             </Row>
-            <Row style={{ height: "4%" }}>
+            <Row style={{ height: "15px" }}>
               <Col>
                 <div style={{ backgroundColor: "white" }}>&nbsp;</div>
               </Col>
             </Row>
-            <Row style={{ height: "48%" }}>
+            <Row style={{ height: "270px" }}>
               <Col>
                 <ShotClock {...currentGame} />
               </Col>

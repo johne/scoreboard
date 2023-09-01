@@ -5,7 +5,7 @@ class GameManager {
   constructor(server) {
     this.server = server;
     this.dbManager = new DbManager();
-    this.pause = 5 * 1000;
+    this.pause = 0;
     this.remoteManager = new RemoteManager(this);
   }
 
@@ -196,12 +196,12 @@ class GameManager {
         return this.shotClockReset();
       case "add5Seconds":
         return this.addSecs(5);
-      case "add20Seconds":
-        return this.addSecs(20);
+      case "add10Seconds":
+        return this.addSecs(10);
       case "remove5Seconds":
         return this.addSecs(-5);
-      case "remove20Seconds":
-        return this.addSecs(-20);
+      case "remove10Seconds":
+        return this.addSecs(-10);
     }
   }
 

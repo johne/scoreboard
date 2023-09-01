@@ -18,12 +18,12 @@ const Y = 23;
 const actionMap = {
   [L]: "Score",
   [R]: "MinusScore",
-  [D_RIGHT]: "add20Seconds",
-  [D_LEFT]: "remove20Seconds",
-  [D_UP]: "add5Seconds",
-  [D_DOWN]: "remove5Seconds",
-  [A]: "playPause",
-  [B]: "playPause",
+  [D_RIGHT]: "add10Seconds",
+  [D_LEFT]: "remove10Seconds",
+  [D_UP]: "playPause",
+  [D_DOWN]: "playPause",
+  [A]: "shotClock",
+  [B]: "shotClock",
   [X]: "shotClock",
   [Y]: "shotClock"
 };
