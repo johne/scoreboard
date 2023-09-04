@@ -19,6 +19,7 @@ import {
   BlackBox
 } from "./styled";
 import ShotClock from "./shotClock";
+import TeamLogo from "./teamLogo";
 
 const Scoreboard = ({ currentGame, onComplete }) => {
   const { home, homeScore, away, awayScore } = currentGame;
@@ -35,23 +36,49 @@ const Scoreboard = ({ currentGame, onComplete }) => {
       }}
     >
       <tr>
-        <TopLeft></TopLeft>
+        <TopLeft>
+          <TeamLogo teamInfo={currentGame?.teamInfo?.away} />
+        </TopLeft>
         <Bar />
         <TopMiddle>
-          <ScoreBlock name={away} score={awayScore} />
+          <ScoreBlock
+            name={away}
+            score={awayScore}
+            teamInfo={currentGame?.teamInfo?.away}
+            side="left"
+          />
         </TopMiddle>
         <MiddleBar />
         <TopMiddle>
-          <ScoreBlock name={home} score={homeScore} />
+          <ScoreBlock
+            name={home}
+            score={homeScore}
+            teamInfo={currentGame?.teamInfo?.home}
+            side="right"
+          />
         </TopMiddle>
         <Bar />
-        <TopRight></TopRight>
+        <TopRight>
+          <TeamLogo teamInfo={currentGame?.teamInfo?.home} />
+        </TopRight>
       </tr>
       <tr>
         <Bar />
       </tr>
       <tr>
-        <BottomLeft></BottomLeft>
+        <BottomLeft>
+          <Clock />
+          <div
+            style={{
+              backgroundColor: "white",
+              marginTop: "35px",
+              marginBottom: "20px"
+            }}
+          >
+            &nbsp;
+          </div>
+          <Weather />
+        </BottomLeft>
         <Bar />
         <BottomMiddle>
           <Container
@@ -85,7 +112,17 @@ const Scoreboard = ({ currentGame, onComplete }) => {
         </BottomMiddle>
         <Bar />
         <BottomRight>
-          <BlackBox />
+          <Clock />
+          <div
+            style={{
+              backgroundColor: "white",
+              marginTop: "35px",
+              marginBottom: "20px"
+            }}
+          >
+            &nbsp;
+          </div>
+          <Weather />
         </BottomRight>
       </tr>
     </table>

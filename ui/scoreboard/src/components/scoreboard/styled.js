@@ -46,6 +46,12 @@ export const BottomMiddle = styled.td`
   width: ${bigX};
 `;
 
+export const FeedContainer = styled.div`
+  background-color: white;
+  height: ${bigY};
+  width: ${bigX};
+`;
+
 export const MiddleBar = styled.td`
   height: 1px;
   width: ${middleBar};
@@ -56,11 +62,4 @@ export const Bar = styled.td`
   height: ${bar};
   width: ${bar};
   background-color: white;
-`;
-
-export const BlackBox = styled.div`
-  height: 98%;
-  width: 98%;
-  margin: auto;
-  background-color: black;
 `;

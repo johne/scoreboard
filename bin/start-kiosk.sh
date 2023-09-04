@@ -7,6 +7,9 @@ unclutter -idle 0.5 -root &
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chromium/Default/Preferences
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
 
+sudo bluetoothctl power on
+sudo /usr/sbin/rfkill unblock all
+
 /home/john/scoreboard/bin/checkRunServer.sh;
 
 sleep 10

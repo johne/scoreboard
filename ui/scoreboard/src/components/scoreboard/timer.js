@@ -21,9 +21,9 @@ const PauseCounter = styled.div`
   bottom: 2px;
   right: 2px;
   animation-duration: 1.1s;
-  animation-name: countdown${props => props.seconds};
+  animation-name: countdown ${props => props.seconds};
   animation-timing-function: ease-in;
-  
+
   @keyframes countdown${props => props.seconds} {
     from {
       transform: scale(0.5);
@@ -98,7 +98,7 @@ class Timer extends React.Component {
               {this.pad(seconds, 2)}
               {milliseconds !== undefined && (
                 <React.Fragment>
-                  .{Math.round(milliseconds + 1 / 100)}
+                  .{Math.floor(milliseconds / 100)}
                 </React.Fragment>
               )}
             </span>

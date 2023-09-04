@@ -2,11 +2,38 @@ const DbManager = require("./DbManager");
 const RemoteManager = require("./RemoteManager");
 
 class GameManager {
+  static teams = [
+    {
+      altNames: ["dad", "Dad", "idk", "IDK"],
+      controller: "yellow",
+      logo: ""
+    },
+    {
+      altNames: ["reef", "Reef", "lazy llamas", "Lazy Llamas"],
+      controller: "teal",
+      logo: "lazy-llamas.jpeg"
+    }
+  ];
+
   constructor(server) {
     this.server = server;
     this.dbManager = new DbManager();
     this.pause = 0;
     this.remoteManager = new RemoteManager(this);
+  }
+
+  async getPositionForController(controller) {
+    const currentGame = await this.getCurrentGame();
+
+    if (!currentGame.teamInfo) {
+      return undefined;
+    }
+
+    const team = Object.keys(currentGame.teamInfo).find(
+      key => currentGame.teamInfo[key].controller === controller
+    );
+
+    return team;
   }
 
   async closeAllGames() {
@@ -19,6 +46,20 @@ class GameManager {
           return this.dbManager.update({ created: game.created }, game);
         })
       ));
+  }
+
+  figureTeams(gameInfo) {
+    const { home, away } = gameInfo;
+
+    return GameManager.teams.reduce((teams, team) => {
+      if (team.altNames.includes(home)) {
+        teams.home = team;
+      } else if (team.altNames.includes(away)) {
+        teams.away = team;
+      }
+
+      return teams;
+    }, {});
   }
 
   async newGame(gameInfo) {
@@ -35,12 +76,7 @@ class GameManager {
     gameInfo.shotClockEnd = gameInfo.start + gameInfo.shotClock * 1000;
     gameInfo.shotClockLeft = gameInfo.shotClock * 1000;
 
-    console.log("controllers", gameInfo.controllers);
-
-    gameInfo.controllers = gameInfo.controllers || {
-      teal: "home",
-      yellow: "away"
-    };
+    gameInfo.teamInfo = this.figureTeams(gameInfo);
 
     await this.dbManager.insert(gameInfo);
 
@@ -54,11 +90,25 @@ class GameManager {
   async announceGame() {
     const currentGame = await this.getCurrentGame();
 
-    const connectedControllers = this.remoteManager.getConnected();
-
     this.server.broadcast({
-      currentGame: { ...currentGame, connectedControllers }
+      currentGame
     });
+  }
+
+  async changeConnector(color, connected) {
+    const team = await this.getPositionForController(color);
+
+    if (!team) {
+      return;
+    }
+
+    const currentGame = await this.getCurrentGame();
+
+    currentGame.teamInfo[team].connected = connected;
+
+    this.dbManager.update({ created: currentGame.created }, currentGame);
+
+    this.announceGame();
   }
 
   async pauseGame() {

@@ -9,6 +9,9 @@ const ScoreContainer = styled.div`
   padding-bottom: 15px;
   display: flex;
   flex-flow: column;
+  ${props => props.img && `background-image: url("${props.img}");`}
+  background-position: ${props => props.side} bottom; /*Positioning*/
+  background-repeat: no-repeat; /*Prevent showing multiple background images*/
 `;
 
 const Team = styled.div`
@@ -31,9 +34,13 @@ const Score = styled.div`
   padding-bottom: 25px;
 `;
 
-const ScoreBlock = ({ name, score }) => {
+const ScoreBlock = ({ name, score, teamInfo, side }) => {
+  const img = teamInfo?.connected
+    ? `${teamInfo.controller}-controller.png`
+    : undefined;
+
   return (
-    <ScoreContainer>
+    <ScoreContainer side={side} img={img}>
       <Team>{name}</Team>
       <Score>{score}</Score>
     </ScoreContainer>

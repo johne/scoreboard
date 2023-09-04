@@ -18,10 +18,10 @@ const Y = 23;
 const actionMap = {
   [L]: "Score",
   [R]: "MinusScore",
-  [D_RIGHT]: "add10Seconds",
-  [D_LEFT]: "remove10Seconds",
-  [D_UP]: "playPause",
-  [D_DOWN]: "playPause",
+  [D_UP]: "add10Seconds",
+  [D_DOWN]: "remove10Seconds",
+  [D_RIGHT]: "playPause",
+  [D_LEFT]: "playPause",
   [A]: "shotClock",
   [B]: "shotClock",
   [X]: "shotClock",
@@ -29,9 +29,6 @@ const actionMap = {
 };
 
 class RemoteManager {
-  static tealTag = "teal";
-  static yellowTag = "yellow";
-
   constructor(gameManager) {
     this.gameManager = gameManager;
     this.keyboards = {};
@@ -53,8 +50,14 @@ class RemoteManager {
       console.log({ event, filename });
       if (event === "rename") {
         console.log("killing keyboard" + filename);
-        this.keyboards[filename] = null;
-      } else if (this.keyboards[filename] === null) {
+        if (this.keyboards[filename]) {
+          this.gameManager.changeConnector(
+            this.keyboards[filename].color,
+            false
+          );
+        }
+        delete this.keyboards[filename];
+      } else if (!this.keyboards[filename]) {
         try {
           fs.accessSync(`/dev/input/${filename}`, fs.constants.R_OK);
         } catch (err) {
@@ -103,8 +106,11 @@ class RemoteManager {
     console.log("watching keyboard", { filename, address });
     const keyboard = new InputEvent.Keyboard(`/dev/input/${filename}`);
 
+    const color = address === TEAL_REMOTE ? "teal" : "yellow";
+
     keyboard.on("keyup", data => this._processKey(data, address));
-    this.keyboards[filename] = { keyboard, address };
+    this.keyboards[filename] = { keyboard, address, color };
+    this.gameManager.changeConnector(color, true);
   }
 
   async _scoreAction(action, address) {
@@ -117,9 +123,15 @@ class RemoteManager {
 
     const currentColor = address === TEAL_REMOTE ? "teal" : "yellow";
 
-    const controllerPosition = currentGame.controllers[currentColor];
+    const team = Object.keys(currentGame.teams).find(
+      key => currentGame.teams[key].controller === currentColor
+    );
 
-    return `${controllerPosition}${action}`;
+    if (team) {
+      return `${controllerPosition}${action}`;
+    } else {
+      console.log("team not found");
+    }
   }
 
   async _processKey(data, address) {
@@ -135,9 +147,11 @@ class RemoteManager {
       action = await this._scoreAction(action, address);
     }
 
-    console.log("sending action", { action });
+    if (action) {
+      console.log("sending action", { action });
 
-    this.gameManager.handleMessage({ action });
+      this.gameManager.handleMessage({ action });
+    }
   }
 }
 

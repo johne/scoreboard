@@ -24,7 +24,7 @@ class Clock extends React.Component {
         style={{
           color: "white",
           font: "Tahoma",
-          fontSize: 25,
+          fontSize: 65,
           fontWeight: "bold",
           textAlign: "center",
           width: "100%",

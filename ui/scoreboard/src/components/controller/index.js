@@ -12,6 +12,7 @@ import {
   SubmitButton
 } from "./controller.styled";
 import ShotClock from "../scoreboard/shotClock";
+import { useEffect } from "react/cjs/react.production.min";
 
 setConfiguration({
   gutterWidth: 1,
@@ -20,27 +21,41 @@ setConfiguration({
   containerWidths: [540, 710, 1280, 1280]
 });
 
-const teal = ["reef", "lazy llamas"];
-const yellow = ["dad", "idk", "polar penguin pops"];
-
 const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
   const { home, homeScore, away, awayScore } = currentGame;
 
+  const gameOver = currentGame.end < Date.now();
+
+  console.log({ gameOver });
+
+  const [showOvertime, setShowOvertime] = React.useState(gameOver);
   const [duration, setDuration] = React.useState(20);
   const [teamNames, setTeamNames] = React.useState(historyTeams[0]);
+
+  console.log({ gameOver, showOvertime });
+
+  useEffect(() => {
+    setShowOvertime(gameOver);
+  }, [gameOver]);
+
+  const onCompleteLocal = () => {
+    onComplete();
+    setShowOvertime(true);
+  };
 
   const newGameClick = () => {
     console.log("new game here");
     const [away, home] = teamNames.split("@");
-    const controllers = {
-      teal: teal.includes(home) ? "home" : "away",
-      yellow: yellow.includes(home) ? "home" : "away"
-    };
 
     sendMessage({
       action: "newGame",
-      gameInfo: { home, away, duration, controllers }
+      gameInfo: { home, away, duration }
     });
+  };
+
+  const overtimeClick = () => {
+    console.log("overtime");
+    sendMessage({ action: "overtime" });
   };
 
   const onTimerClick = () => {
@@ -109,13 +124,16 @@ const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
       </Row>
       <Row>
         <SubmitButton onClick={newGameClick}>New Game</SubmitButton>
+        {showOvertime && (
+          <SubmitButton onClick={overtimeClick}>Overtime</SubmitButton>
+        )}
       </Row>
       <Row style={{ backgroundColor: "#1f567c" }} onClick={onTimerClick}>
         <Col style={{ border: "white solid 5px" }}>
-          <Timer {...currentGame} onComplete={onComplete} />
+          <Timer {...currentGame} onComplete={onCompleteLocal} />
         </Col>
         <Col style={{ border: "white solid 5px" }}>
-          <ShotClock {...currentGame} onComplete={onComplete} />
+          <ShotClock {...currentGame} />
         </Col>
       </Row>
       <Row style={{ backgroundColor: "#1f567c" }}>

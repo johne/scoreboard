@@ -92,8 +92,6 @@ class ShotClock extends React.Component {
     const { shotClockEnd, paused, start } = this.props;
     const now = new Date().getTime();
 
-    console.log("shot clock:" + (now - shotClockEnd));
-
     return paused || now < start ? (
       <div style={{ height: "100%" }}>--</div>
     ) : now < shotClockEnd ? (

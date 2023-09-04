@@ -20,3 +20,9 @@ yarn-debug.log*
 yarn-error.log*
 
 yarn.lock
+
+public/media
+public/content
+
+build/public/media
+build/public/content
