@@ -15,14 +15,15 @@ import {
   BottomMiddle,
   BottomRight,
   MiddleBar,
-  Bar,
-  BlackBox
+  Bar
 } from "./styled";
 import ShotClock from "./shotClock";
 import TeamLogo from "./teamLogo";
+import History from "./history";
 
-const Scoreboard = ({ currentGame, onComplete }) => {
+const Scoreboard = ({ currentGame, onComplete, savedGames }) => {
   const { home, homeScore, away, awayScore } = currentGame;
+  console.log("savedGames", savedGames);
   return (
     <table
       cellspacing="0"
@@ -112,17 +113,7 @@ const Scoreboard = ({ currentGame, onComplete }) => {
         </BottomMiddle>
         <Bar />
         <BottomRight>
-          <Clock />
-          <div
-            style={{
-              backgroundColor: "white",
-              marginTop: "35px",
-              marginBottom: "20px"
-            }}
-          >
-            &nbsp;
-          </div>
-          <Weather />
+          <History savedGames={savedGames} />
         </BottomRight>
       </tr>
     </table>

@@ -117,21 +117,14 @@ class RemoteManager {
     const requests = process._getActiveRequests();
     const handles = process._getActiveHandles();
 
-    console.log("getting current game", { requests, handles });
-    const currentGame = await this.gameManager.getCurrentGame();
-    console.log("got current game");
-
     const currentColor = address === TEAL_REMOTE ? "teal" : "yellow";
 
-    const team = Object.keys(currentGame.teams).find(
-      key => currentGame.teams[key].controller === currentColor
+    console.log("getting current game", { requests, handles });
+    const controllerPosition = await this.gameManager.getPositionForController(
+      currentColor
     );
 
-    if (team) {
-      return `${controllerPosition}${action}`;
-    } else {
-      console.log("team not found");
-    }
+    return `${controllerPosition}${action}`;
   }
 
   async _processKey(data, address) {
@@ -152,6 +145,11 @@ class RemoteManager {
 
       this.gameManager.handleMessage({ action });
     }
+  }
+
+  checkControllers() {
+    const connected = this.getConnected();
+    connected.forEach(color => this.gameManager.changeConnector(color, true));
   }
 }
 

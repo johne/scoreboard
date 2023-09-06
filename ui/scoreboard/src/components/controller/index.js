@@ -26,13 +26,9 @@ const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
 
   const gameOver = currentGame.end < Date.now();
 
-  console.log({ gameOver });
-
   const [showOvertime, setShowOvertime] = React.useState(gameOver);
   const [duration, setDuration] = React.useState(20);
   const [teamNames, setTeamNames] = React.useState(historyTeams[0]);
-
-  console.log({ gameOver, showOvertime });
 
   useEffect(() => {
     setShowOvertime(gameOver);
@@ -56,6 +52,10 @@ const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
   const overtimeClick = () => {
     console.log("overtime");
     sendMessage({ action: "overtime" });
+  };
+
+  const saveGame = () => {
+    sendMessage({ action: "saveGame" });
   };
 
   const onTimerClick = () => {
@@ -125,7 +125,10 @@ const Controller = ({ currentGame, sendMessage, onComplete, historyTeams }) => {
       <Row>
         <SubmitButton onClick={newGameClick}>New Game</SubmitButton>
         {showOvertime && (
-          <SubmitButton onClick={overtimeClick}>Overtime</SubmitButton>
+          <>
+            <SubmitButton onClick={overtimeClick}>Overtime</SubmitButton>
+            <SubmitButton onClick={saveGame}>Save Game</SubmitButton>
+          </>
         )}
       </Row>
       <Row style={{ backgroundColor: "#1f567c" }} onClick={onTimerClick}>

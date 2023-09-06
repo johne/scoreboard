@@ -81,6 +81,8 @@ class GameManager {
     await this.dbManager.insert(gameInfo);
 
     this.announceGame();
+
+    this.remoteManager.checkControllers();
   }
 
   getCurrentGame() {
@@ -211,6 +213,16 @@ class GameManager {
     }
   }
 
+  async saveGame() {
+    const currentGame = await this.getCurrentGame();
+
+    currentGame.saved = true;
+
+    await this.dbManager.update({ created: currentGame.created }, currentGame);
+
+    this.announceGame();
+  }
+
   async addSecs(secs) {
     const currentGame = await this.getCurrentGame();
     currentGame.end += secs * 1000;
@@ -252,6 +264,8 @@ class GameManager {
         return this.addSecs(-5);
       case "remove10Seconds":
         return this.addSecs(-10);
+      case "saveGame":
+        return this.saveGame();
     }
   }
 

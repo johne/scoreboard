@@ -19,7 +19,8 @@ class App extends React.Component {
         "penguin polar pops@lazy llamas",
         "lazy llamas@penguin polar pops",
         "something else"
-      ]
+      ],
+      savedGames: []
     };
   }
 
@@ -65,7 +66,13 @@ class App extends React.Component {
         );
         console.log(historyTeams);
         this.setState(prev => {
-          return { historyTeams };
+          return {
+            historyTeams,
+            savedGames: res
+              .sort((a, b) => b.created - a.created)
+              .filter(game => game.saved)
+              .slice(0, 6)
+          };
         });
       })
       .catch(err => {
@@ -89,7 +96,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { currentGame, historyTeams } = this.state;
+    const { currentGame, historyTeams, savedGames } = this.state;
 
     return (
       <Router className="App">
@@ -103,6 +110,7 @@ class App extends React.Component {
                   <Scoreboard
                     {...props}
                     currentGame={currentGame}
+                    savedGames={savedGames}
                     onComplete={this.onComplete}
                   />
                 )}
