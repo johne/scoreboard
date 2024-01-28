@@ -22,8 +22,8 @@
     "@hapi/inert": "^5.2.2",
     "@hapi/nes": "^11.2.2",
     "input-event": "^1.2.6",
+    "node-fetch": "^2.7.0",
     "node-wav-player": "^0.1.0",
-    "onoff": "^5.0.0",
     "play-sound": "^1.1.3",
     "tingodb": "^0.6.1"
   },

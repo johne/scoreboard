@@ -1,7 +1,7 @@
 const player = require("node-wav-player");
 
 class BuzzerManager {
-  construbtor() {}
+  constructor() {}
 
   _buzzIt() {
     console.log("buzzing");

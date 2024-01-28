@@ -1,17 +1,26 @@
 const DbManager = require("./DbManager");
 const RemoteManager = require("./RemoteManager");
+const { triggerListeners, triggerGameOver } = require("./game-listeners");
 
 class GameManager {
   static teams = [
     {
       altNames: ["dad", "Dad", "idk", "IDK"],
       controller: "yellow",
-      logo: ""
+      logo: "",
+      scoreColors: {
+        fgColor: [0, 0, 255],
+        bgColor: [255, 0, 0]
+      }
     },
     {
       altNames: ["reef", "Reef", "lazy llamas", "Lazy Llamas"],
       controller: "teal",
-      logo: "lazy-llamas.jpeg"
+      logo: "lazy-llamas.jpeg",
+      scoreColors: {
+        fgColor: [115, 0, 255],
+        bgColor: [0, 255, 0]
+      }
     }
   ];
 
@@ -121,19 +130,27 @@ class GameManager {
     currentGame.shotClockLeft = currentGame.shotClockEnd - now;
     currentGame.paused = true;
 
+    if (this.endTimer) {
+      clearTimeout(this.endTimer);
+      this.endTimer = undefined;
+    }
+
     this.dbManager.update({ created: currentGame.created }, currentGame);
 
     this.announceGame();
   }
 
   async unpauseGame() {
-    const now = new Date().getTime();
     const currentGame = await this.getCurrentGame();
+
+    const now = new Date().getTime();
 
     currentGame.start = now + this.pause;
     currentGame.end = currentGame.start + currentGame.timeLeft;
     currentGame.shotClockEnd = currentGame.start + currentGame.shotClockLeft;
     currentGame.paused = false;
+
+    this._setupGameOverTimer(currentGame);
 
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
@@ -223,16 +240,38 @@ class GameManager {
     this.announceGame();
   }
 
+  _setupGameOverTimer(currentGame) {
+    if (this.endTimer) {
+      clearTimeout(this.endTimer);
+    }
+
+    if (!currentGame.paused) {
+      const now = new Date().getTime();
+
+      console.log("starting end timer", { now, end: currentGame.end });
+
+      this.endTimer = setTimeout(() => {
+        console.log("timeout!!!");
+        triggerGameOver(currentGame);
+      }, currentGame.end - now);
+    }
+  }
+
   async addSecs(secs) {
     const currentGame = await this.getCurrentGame();
     currentGame.end += secs * 1000;
     currentGame.timeLeft += secs * 1000;
+
+    this._setupGameOverTimer(currentGame);
+
     await this.dbManager.update({ created: currentGame.created }, currentGame);
 
     this.announceGame();
   }
 
-  handleMessage(message) {
+  async handleMessage(message) {
+    triggerListeners(message, await this.getCurrentGame());
+
     switch (message.action) {
       case "playPause":
         return this.playPause();
