@@ -89,10 +89,22 @@ class LedManager {
     }
   }
 
-  gameOver() {
+  gameOver(currentGame) {
+    const { homeScore, awayScore, teamInfo } = currentGame;
+
+    let newState = solidTemplate(endColor);
+
+    if (homeScore > awayScore && teamInfo && teamInfo.away) {
+      newState = scoreTemplate(teamInfo.away.fgColor, teamInfo.away.bgColor);
+    }
+
+    if (awayScore > homeScore && teamInfo && teamInfo.home) {
+      newState = scoreTemplate(teamInfo.home.fgColor, teamInfo.home.bgColor);
+    }
+
     console.log("led game over!!!");
     this.gameOverFlag = true;
-    this._solidState();
+    this._sendState(newState);
   }
 }
 
